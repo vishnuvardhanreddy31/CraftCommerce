@@ -36,7 +36,9 @@ export default function Footer() {
       </div>
 
       <div className={styles.bottom}>
-        <p className={styles.copy}>© {year} CraftCommerce. All rights reserved.</p>
+        <div className="container">
+          <p className={styles.copy}>© {year} CraftCommerce. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   )
