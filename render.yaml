@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: craftcommerce
+    env: docker
+    dockerfilePath: ./Dockerfile
+    # Render will set the PORT environment variable automatically
+    envVars:
+      - key: MONGODB_URL
+        sync: false          # Set this to your MongoDB Atlas connection string in the Render dashboard
+      - key: DATABASE_NAME
+        value: craftcommerce
+      - key: SECRET_KEY
+        generateValue: true  # Render auto-generates a secure random value
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"
+      - key: CORS_ORIGINS
+        value: '["https://craftcommerce.onrender.com"]'
+        # Update this value in the Render dashboard to match your actual service URL or custom domain
