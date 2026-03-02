@@ -7,16 +7,26 @@ import Input from '../components/UI/Input.jsx'
 import Card from '../components/UI/Card.jsx'
 import styles from './Auth.module.css'
 
+const DEMO_USERS = [
+  { label: 'Admin',    email: 'admin@artisancrafts.com',  password: 'Admin@1234',    tenantId: '64a0000000000000000000a1' },
+  { label: 'Customer', email: 'customer@example.com',     password: 'Customer@1234', tenantId: '64a0000000000000000000a1' },
+]
+
 export default function Login() {
   const { login } = useAuth()
   const { success, error: toastError } = useToast()
   const navigate = useNavigate()
 
-  const [form,    setForm]    = useState({ email: '', password: '' })
+  const [form,    setForm]    = useState({ email: '', password: '', tenant_id: '' })
   const [errors,  setErrors]  = useState({})
   const [loading, setLoading] = useState(false)
 
   const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }))
+
+  const fillDemo = (demo) => {
+    setForm({ email: demo.email, password: demo.password, tenant_id: demo.tenantId })
+    setErrors({})
+  }
 
   const validate = () => {
     const e = {}
@@ -32,8 +42,10 @@ export default function Login() {
     setErrors({})
     setLoading(true)
     try {
+      const tenantId = form.tenant_id.trim() || import.meta.env.VITE_TENANT_ID || 'default'
+      localStorage.setItem('cc_tenant_id', tenantId)
       const user = await login(form.email, form.password)
-      success(`Welcome back, ${user.name || user.email}!`)
+      success(`Welcome back, ${user.first_name || user.email}!`)
       navigate(user.role === 'admin' ? '/admin' : '/')
     } catch (err) {
       toastError(err.response?.data?.detail || 'Invalid credentials. Please try again.')
@@ -54,6 +66,17 @@ export default function Login() {
           <p className={styles.sub}>Sign in to your CraftCommerce account</p>
         </div>
 
+        <div className={styles.demoBox}>
+          <p className={styles.demoLabel}>Try a demo account:</p>
+          <div className={styles.demoButtons}>
+            {DEMO_USERS.map((d) => (
+              <button key={d.label} type="button" className={styles.demoBtn} onClick={() => fillDemo(d)}>
+                {d.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <Input
             label="Email address"
@@ -72,6 +95,13 @@ export default function Login() {
             onChange={set('password')}
             error={errors.password}
             placeholder="••••••••"
+          />
+          <Input
+            label="Tenant / Store ID (optional)"
+            value={form.tenant_id}
+            onChange={set('tenant_id')}
+            placeholder="e.g. 64a0000000000000000000a1"
+            hint="Required when using demo or multi-tenant accounts."
           />
           <Button type="submit" size="lg" fullWidth loading={loading}>
             Sign In

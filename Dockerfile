@@ -21,6 +21,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy backend application
 COPY backend/ ./
 
+# Copy seed script for demo data
+COPY seed.py ./seed.py
+
 # Copy built frontend static files
 COPY --from=frontend-builder /app/dist /usr/share/nginx/html
 
