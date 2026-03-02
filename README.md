@@ -4,6 +4,26 @@ A production-ready **multi-tenant SaaS eCommerce platform** built with FastAPI, 
 
 ---
 
+## UI Screenshots
+
+| Page | Preview |
+|------|---------|
+| **Home** | ![Home](https://github.com/user-attachments/assets/ec5905a3-a77d-4c4f-aa98-7f2119065443) |
+| **Product Listing** | ![Products](https://github.com/user-attachments/assets/0abd6c2d-829d-4b57-881d-10bebd8a2c89) |
+| **Product Detail** | ![Product Detail](https://github.com/user-attachments/assets/4a2111ae-7f1e-493d-9c91-dc7f783931e9) |
+| **Cart** | ![Cart](https://github.com/user-attachments/assets/0a47b0ef-b69c-4371-8624-c869ec7136fa) |
+| **Checkout** | ![Checkout](https://github.com/user-attachments/assets/b2fda644-e88a-4fc1-adc8-23e95e6fb1ef) |
+| **Order History** | ![Order History](https://github.com/user-attachments/assets/0a56532b-b7aa-4ad6-a90f-dc2752147805) |
+| **Login** | ![Login](https://github.com/user-attachments/assets/e0d758a7-ea70-46f4-8bd5-fcae0807ba1b) |
+| **Register** | ![Register](https://github.com/user-attachments/assets/0d0168ae-9a99-4be2-9df4-8c8604c0c4d3) |
+| **Admin Dashboard** | ![Admin Dashboard](https://github.com/user-attachments/assets/c8ec2411-6658-4163-a672-0e6424e59220) |
+| **Admin Products** | ![Admin Products](https://github.com/user-attachments/assets/c99a6e75-4a2d-4566-baea-be1100e06362) |
+| **Admin Categories** | ![Admin Categories](https://github.com/user-attachments/assets/a85b136a-6eb4-46bb-aa7e-0b0389280138) |
+| **Admin Orders** | ![Admin Orders](https://github.com/user-attachments/assets/8afe0143-a8e2-48db-8534-b5dfc4e1acab) |
+| **Admin Settings** | ![Admin Settings](https://github.com/user-attachments/assets/6c31fc13-e087-4c7f-a293-262907b3ac25) |
+
+---
+
 ## Table of Contents
 
 - [Features](#features)
