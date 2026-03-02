@@ -70,11 +70,13 @@ export default function Navbar() {
           {user ? (
             <div className={styles.userMenu}>
               <button className={styles.avatar} aria-label="Account menu" onClick={() => setMenuOpen(!menuOpen)}>
-                {user.name?.[0]?.toUpperCase() || 'U'}
+                {(user.first_name?.[0] || user.email?.[0])?.toUpperCase() || 'U'}
               </button>
               {menuOpen && (
                 <div className={styles.dropdown}>
-                  <p className={styles.dropdownUser}>{user.name || user.email}</p>
+                  <p className={styles.dropdownUser}>
+                    {user.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : user.email}
+                  </p>
                   <hr className={styles.dropdownDivider} />
                   <Link to="/orders" className={styles.dropdownItem} onClick={close}>My Orders</Link>
                   {user.role === 'admin' && (

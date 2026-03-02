@@ -1,11 +1,15 @@
 /* Shared admin table styles */
-.page { padding: 2.5rem 0 4rem; }
+.page { padding: 2rem 0 4rem; }
+
+@media (min-width: 640px) {
+  .page { padding: 2.5rem 0 4rem; }
+}
 
 .header {
   display: flex; align-items: center; justify-content: space-between;
   flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
 }
-.title { font-size: 1.75rem; font-weight: 700; }
+.title { font-size: clamp(1.375rem, 5vw, 1.75rem); font-weight: 700; }
 
 .toolbar { margin-bottom: 1.25rem; }
 
@@ -14,18 +18,19 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.table { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 480px; }
 .table th {
-  text-align: left; padding: 0.75rem 1.25rem;
+  text-align: left; padding: 0.75rem 1rem;
   font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--color-text-muted); background: var(--color-surface-2);
   border-bottom: 1px solid var(--color-border); white-space: nowrap;
 }
 .table td {
-  padding: 0.875rem 1.25rem;
+  padding: 0.875rem 1rem;
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
 }
@@ -43,13 +48,14 @@
 .price { font-weight: 700; }
 
 /* ── Row action buttons ── */
-.actions { display: flex; gap: 0.5rem; align-items: center; }
+.actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
 .editBtn, .deleteBtn, .confirmBtn, .cancelBtn {
   padding: 0.3rem 0.7rem; border-radius: var(--radius-sm);
   font-size: 0.8125rem; font-weight: 500;
   border: 1.5px solid transparent; cursor: pointer;
   transition: background var(--transition), border-color var(--transition);
+  white-space: nowrap;
 }
 
 .editBtn    { background: var(--color-primary-light); color: var(--color-primary); border-color: var(--color-primary-light); }
@@ -66,28 +72,50 @@
   position: fixed; inset: 0;
   background: rgba(0,0,0,0.45);
   backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2000; padding: 1rem;
+  display: flex; align-items: flex-end; justify-content: center;
+  z-index: 2000; padding: 0;
+}
+
+@media (min-width: 640px) {
+  .overlay { align-items: center; padding: 1rem; }
 }
 
 .modal {
   background: var(--color-surface);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   box-shadow: var(--shadow-xl);
-  width: 100%; max-width: 560px;
-  max-height: 90vh; overflow-y: auto;
+  width: 100%;
+  max-height: 92vh; overflow-y: auto;
   animation: modalIn 0.25s ease;
 }
 
+@media (min-width: 640px) {
+  .modal {
+    border-radius: var(--radius-xl);
+    max-width: 560px;
+    max-height: 90vh;
+  }
+}
+
 @keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 640px) {
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+  }
 }
 
 .modalHeader {
   display: flex; align-items: center; justify-content: space-between;
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--color-border);
+  position: sticky; top: 0;
+  background: var(--color-surface);
+  z-index: 1;
 }
 .modalHeader h2 { font-size: 1.125rem; font-weight: 700; }
 
@@ -100,11 +128,19 @@
 .closeBtn:hover { background: var(--color-surface-2); color: var(--color-text); }
 
 .modalForm {
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex; flex-direction: column; gap: 1rem;
 }
 
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (min-width: 480px) {
+  .modalForm { padding: 1.5rem; }
+}
+
+.row2 { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+
+@media (min-width: 480px) {
+  .row2 { grid-template-columns: 1fr 1fr; }
+}
 
 .selectLabel {
   display: block; font-size: 0.875rem; font-weight: 500;
@@ -136,7 +172,7 @@
 
 .modalActions {
   display: flex; justify-content: flex-end; gap: 0.75rem;
-  margin-top: 0.5rem;
+  margin-top: 0.5rem; flex-wrap: wrap;
 }
 
 /* ── Inline form (categories) ── */

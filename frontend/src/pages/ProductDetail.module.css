@@ -1,4 +1,8 @@
-.page { padding: 2rem 0 4rem; }
+.page { padding: 1.5rem 0 4rem; }
+
+@media (min-width: 640px) {
+  .page { padding: 2rem 0 4rem; }
+}
 
 .notFound {
   display: flex; flex-direction: column; align-items: center; gap: 1rem;

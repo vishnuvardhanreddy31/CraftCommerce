@@ -11,6 +11,10 @@
   max-width: 440px !important;
 }
 
+@media (max-width: 480px) {
+  .card { max-width: 100% !important; margin: 0; border-radius: var(--radius-lg); }
+}
+
 .header {
   display: flex;
   flex-direction: column;

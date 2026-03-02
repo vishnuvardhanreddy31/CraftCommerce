@@ -25,8 +25,10 @@ export default function Register() {
     if (!form.first_name.trim())         e.first_name       = 'First name is required'
     if (!form.last_name.trim())          e.last_name        = 'Last name is required'
     if (!form.email.trim())              e.email            = 'Email is required'
-    if (form.password.length < 8)        e.password         = 'Password must be at least 8 characters'
-    else if (!/\d/.test(form.password)) e.password         = 'Password must contain at least one digit'
+    const pwErrors = []
+    if (form.password.length < 8)     pwErrors.push('at least 8 characters')
+    if (!/\d/.test(form.password))    pwErrors.push('at least one digit')
+    if (pwErrors.length)              e.password = `Password must have ${pwErrors.join(' and ')}`
     if (form.password !== form.confirm_password) e.confirm_password = 'Passwords do not match'
     return e
   }
