@@ -15,7 +15,7 @@ class AuthService:
     def __init__(self, db: AsyncIOMotorDatabase) -> None:
         self.db = db
 
-    async def register(self, data: UserRegister, tenant_id: str, role: UserRole = UserRole.customer) -> UserResponse:
+    async def register(self, data: UserRegister, tenant_id: str, role: UserRole = UserRole.customer) -> TokenResponse:
         existing = await self.db.users.find_one({"tenant_id": tenant_id, "email": data.email})
         if existing:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Email already registered")
@@ -33,7 +33,13 @@ class AuthService:
         }
         result = await self.db.users.insert_one(user_doc)
         user_doc["_id"] = result.inserted_id
-        return UserResponse(**doc_to_response(user_doc))
+        user_id = str(result.inserted_id)
+        token_data = {"sub": user_id, "tenant_id": tenant_id, "role": role.value}
+        return TokenResponse(
+            access_token=create_access_token(token_data),
+            refresh_token=create_refresh_token(token_data),
+            user=UserResponse(**doc_to_response(user_doc)),
+        )
 
     async def login(self, email: str, password: str, tenant_id: str) -> TokenResponse:
         user = await self.db.users.find_one({"tenant_id": tenant_id, "email": email})

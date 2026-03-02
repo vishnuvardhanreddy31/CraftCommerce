@@ -18,3 +18,10 @@ services:
       - key: CORS_ORIGINS
         value: '["https://craftcommerce.onrender.com"]'
         # Update this value in the Render dashboard to match your actual service URL or custom domain
+      - key: SEED_DATA
+        value: "true"
+        # Set to "true" to populate the database with demo tenants, products, and users on startup
+        # Demo credentials after seeding:
+        #   Tenant ID: 64a0000000000000000000a1
+        #   Admin   : admin@artisancrafts.com / Admin@1234
+        #   Customer: customer@example.com   / Customer@1234

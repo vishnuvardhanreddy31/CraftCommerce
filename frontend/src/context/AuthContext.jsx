@@ -41,13 +41,13 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const { data } = await client.post('/api/auth/login', { email, password })
-    persistAuth(data.user, data.token)
+    persistAuth(data.user, data.access_token)
     return data.user
   }, [])
 
   const register = useCallback(async (payload) => {
     const { data } = await client.post('/api/auth/register', payload)
-    persistAuth(data.user, data.token)
+    persistAuth(data.user, data.access_token)
     return data.user
   }, [])
 

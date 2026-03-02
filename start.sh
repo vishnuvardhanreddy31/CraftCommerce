@@ -7,6 +7,12 @@ export PORT="${PORT:-10000}"
 # Substitute ${PORT} in the nginx config template, leaving nginx variables untouched
 envsubst '${PORT}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
+# Optionally seed demo data (set SEED_DATA=true to populate the database)
+if [ "${SEED_DATA}" = "true" ]; then
+  echo "Seeding demo data..."
+  python /app/seed.py && echo "Seed complete." || echo "Seed failed (may already be seeded)."
+fi
+
 # Start uvicorn (FastAPI backend) in the background, log to stderr
 uvicorn app.main:app --host 127.0.0.1 --port 8000 2>&1 &
 UVICORN_PID=$!

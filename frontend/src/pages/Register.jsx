@@ -13,7 +13,7 @@ export default function Register() {
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
-    name: '', email: '', password: '', confirm_password: '', tenant_id: ''
+    first_name: '', last_name: '', email: '', password: '', confirm_password: '', tenant_id: ''
   })
   const [errors,  setErrors]  = useState({})
   const [loading, setLoading] = useState(false)
@@ -22,9 +22,13 @@ export default function Register() {
 
   const validate = () => {
     const e = {}
-    if (!form.name.trim())             e.name             = 'Name is required'
-    if (!form.email.trim())            e.email            = 'Email is required'
-    if (form.password.length < 8)      e.password         = 'Password must be at least 8 characters'
+    if (!form.first_name.trim())         e.first_name       = 'First name is required'
+    if (!form.last_name.trim())          e.last_name        = 'Last name is required'
+    if (!form.email.trim())              e.email            = 'Email is required'
+    const pwErrors = []
+    if (form.password.length < 8)     pwErrors.push('at least 8 characters')
+    if (!/\d/.test(form.password))    pwErrors.push('at least one digit')
+    if (pwErrors.length)              e.password = `Password must have ${pwErrors.join(' and ')}`
     if (form.password !== form.confirm_password) e.confirm_password = 'Passwords do not match'
     return e
   }
@@ -36,17 +40,20 @@ export default function Register() {
     setErrors({})
     setLoading(true)
     try {
+      const tenantId = form.tenant_id.trim() || import.meta.env.VITE_TENANT_ID || 'default'
+      // Store tenant_id so the axios interceptor sends it as X-Tenant-ID header
+      localStorage.setItem('cc_tenant_id', tenantId)
       const payload = {
-        name:      form.name,
-        email:     form.email,
-        password:  form.password,
-        tenant_id: form.tenant_id || import.meta.env.VITE_TENANT_ID || 'default'
+        first_name: form.first_name.trim(),
+        last_name:  form.last_name.trim(),
+        email:      form.email,
+        password:   form.password,
       }
       const user = await register(payload)
-      success(`Account created! Welcome, ${user.name}!`)
+      success(`Account created! Welcome, ${user.first_name}!`)
       navigate('/')
     } catch (err) {
-      const detail = err.response?.data?.detail || err.response?.data?.email?.[0] || 'Registration failed.'
+      const detail = err.response?.data?.detail || 'Registration failed.'
       toastError(detail)
     } finally {
       setLoading(false)
@@ -67,12 +74,20 @@ export default function Register() {
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <Input
-            label="Full Name"
-            autoComplete="name"
-            value={form.name}
-            onChange={set('name')}
-            error={errors.name}
-            placeholder="Jane Doe"
+            label="First Name"
+            autoComplete="given-name"
+            value={form.first_name}
+            onChange={set('first_name')}
+            error={errors.first_name}
+            placeholder="Jane"
+          />
+          <Input
+            label="Last Name"
+            autoComplete="family-name"
+            value={form.last_name}
+            onChange={set('last_name')}
+            error={errors.last_name}
+            placeholder="Doe"
           />
           <Input
             label="Email address"
@@ -90,7 +105,7 @@ export default function Register() {
             value={form.password}
             onChange={set('password')}
             error={errors.password}
-            placeholder="At least 8 characters"
+            placeholder="At least 8 characters, include a digit"
           />
           <Input
             label="Confirm Password"
