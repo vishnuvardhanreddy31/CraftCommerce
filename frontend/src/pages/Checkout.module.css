@@ -1,0 +1,107 @@
+.page { padding: 2.5rem 0 4rem; }
+.title { font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem; }
+
+.empty { display: flex; flex-direction: column; align-items: center; gap: 1rem; padding: 6rem 1rem; text-align: center; }
+.link  { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+
+/* ── Steps ── */
+.steps {
+  display: flex; align-items: center; gap: 0; margin-bottom: 2.5rem;
+}
+
+.step {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.9375rem; font-weight: 500;
+  color: var(--color-text-muted);
+  transition: color var(--transition);
+}
+.stepActive { color: var(--color-primary); }
+
+.stepNum {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8125rem; font-weight: 700;
+}
+.stepActive .stepNum { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
+
+.stepLine {
+  flex: 1; height: 2px; background: var(--color-border); margin: 0 1rem;
+}
+
+/* ── Layout ── */
+.layout {
+  display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: flex-start;
+}
+@media (min-width: 768px) {
+  .layout { grid-template-columns: 1fr 320px; }
+}
+
+/* ── Form Card ── */
+.formCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+}
+
+.formTitleRow { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.formTitle    { font-size: 1.125rem; font-weight: 700; }
+
+.mockBadge {
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-full);
+  background: var(--color-warning-light);
+  color: #92400e;
+  font-weight: 500;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 500px) { .formGrid { grid-template-columns: 1fr; } }
+
+.payActions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+/* ── Summary ── */
+.summary {
+  position: sticky; top: calc(var(--nav-height) + 1rem);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.summaryTitle { font-size: 1.125rem; font-weight: 700; }
+
+.summaryItems { display: flex; flex-direction: column; gap: 0.5rem; max-height: 240px; overflow-y: auto; }
+
+.summaryItem {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;
+  font-size: 0.875rem;
+}
+.summaryItemName  { color: var(--color-text); flex: 1; }
+.summaryQty       { color: var(--color-text-muted); }
+.summaryItemTotal { font-weight: 600; white-space: nowrap; }
+
+.summaryRows { display: flex; flex-direction: column; gap: 0.5rem; border-top: 1px solid var(--color-border); padding-top: 0.75rem; }
+
+.summaryRow {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.9rem; color: var(--color-text-muted);
+}
+.free { color: var(--color-success); font-weight: 500; }
+.summaryTotal {
+  font-size: 1rem; font-weight: 700; color: var(--color-text);
+  border-top: 1.5px solid var(--color-border);
+  padding-top: 0.5rem;
+  margin-top: 0.25rem;
+}

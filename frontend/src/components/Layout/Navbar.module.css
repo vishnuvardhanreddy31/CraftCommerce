@@ -1,0 +1,275 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: var(--nav-height);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.scrolled {
+  border-bottom-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.inner {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ── Logo ── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: opacity var(--transition);
+}
+.logo:hover { opacity: 0.85; color: var(--color-text); }
+
+/* ── Desktop nav ── */
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+@media (min-width: 768px) {
+  .desktopNav { display: flex; }
+}
+
+.navLink, .activeLink {
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition);
+  text-decoration: none;
+}
+.navLink   { color: var(--color-text-muted); }
+.navLink:hover { background: var(--color-surface-2); color: var(--color-text); }
+.activeLink { color: var(--color-primary); background: var(--color-primary-light); }
+
+/* ── Actions ── */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.cartBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  transition: background var(--transition), color var(--transition);
+  text-decoration: none;
+}
+.cartBtn:hover { background: var(--color-surface-2); color: var(--color-primary); }
+
+.cartBadge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginBtn {
+  display: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.loginBtn:hover { background: var(--color-primary-hover); color: #fff; }
+
+@media (min-width: 768px) {
+  .loginBtn { display: flex; }
+}
+
+/* ── User / Avatar ── */
+.userMenu { position: relative; }
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity var(--transition);
+  border: none;
+}
+.avatar:hover { opacity: 0.85; }
+
+@media (min-width: 768px) {
+  .avatar { display: flex; }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem;
+  animation: fadeIn 0.18s ease;
+  z-index: 200;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownUser {
+  padding: 0.375rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdownDivider { border: none; border-top: 1px solid var(--color-border); margin: 0.25rem 0; }
+
+.dropdownItem {
+  display: block;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.dropdownItem:hover { background: var(--color-surface-2); color: var(--color-text); }
+
+.dropdownLogout {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--color-error);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.dropdownLogout:hover { background: var(--color-error-light); }
+
+/* ── Hamburger ── */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+}
+
+@media (min-width: 768px) {
+  .hamburger { display: none; }
+}
+
+.bar {
+  display: block;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.barOpen1 { transform: translateY(7px) rotate(45deg); }
+.barOpen2 { opacity: 0; }
+.barOpen3 { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile menu ── */
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 0.75rem;
+  animation: slideDown 0.22s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (min-width: 768px) {
+  .mobileMenu { display: none; }
+}
+
+.mobileLink {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--transition);
+}
+.mobileLink:hover { background: var(--color-surface-2); color: var(--color-text); }
+
+.mobileLogout {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  text-align: left;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-error);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.mobileLogout:hover { background: var(--color-error-light); }

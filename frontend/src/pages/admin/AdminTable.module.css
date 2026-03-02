@@ -1,0 +1,162 @@
+/* Shared admin table styles */
+.page { padding: 2.5rem 0 4rem; }
+
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+}
+.title { font-size: 1.75rem; font-weight: 700; }
+
+.toolbar { margin-bottom: 1.25rem; }
+
+.tableWrapper {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.table th {
+  text-align: left; padding: 0.75rem 1.25rem;
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--color-text-muted); background: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border); white-space: nowrap;
+}
+.table td {
+  padding: 0.875rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #fafafa; }
+
+.empty { padding: 2rem 1.5rem; text-align: center; color: var(--color-text-muted); }
+
+/* ── Cells ── */
+.productCell { display: flex; align-items: center; gap: 0.75rem; }
+.thumb { width: 44px; height: 44px; object-fit: cover; border-radius: var(--radius-md); flex-shrink: 0; background: var(--color-surface-2); }
+.productName { font-weight: 600; }
+.productCat  { font-size: 0.75rem; color: var(--color-text-muted); }
+.muted { color: var(--color-text-muted); font-size: 0.875rem; }
+.price { font-weight: 700; }
+
+/* ── Row action buttons ── */
+.actions { display: flex; gap: 0.5rem; align-items: center; }
+
+.editBtn, .deleteBtn, .confirmBtn, .cancelBtn {
+  padding: 0.3rem 0.7rem; border-radius: var(--radius-sm);
+  font-size: 0.8125rem; font-weight: 500;
+  border: 1.5px solid transparent; cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.editBtn    { background: var(--color-primary-light); color: var(--color-primary); border-color: var(--color-primary-light); }
+.editBtn:hover { border-color: var(--color-primary); }
+
+.deleteBtn  { background: var(--color-error-light); color: var(--color-error); border-color: var(--color-error-light); }
+.deleteBtn:hover { border-color: var(--color-error); }
+
+.confirmBtn { background: var(--color-error); color: #fff; border-color: var(--color-error); }
+.cancelBtn  { background: var(--color-surface-2); color: var(--color-text-muted); }
+
+/* ── Modal ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2000; padding: 1rem;
+}
+
+.modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%; max-width: 560px;
+  max-height: 90vh; overflow-y: auto;
+  animation: modalIn 0.25s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.modalHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.modalHeader h2 { font-size: 1.125rem; font-weight: 700; }
+
+.closeBtn {
+  width: 32px; height: 32px; border: none; background: none;
+  color: var(--color-text-muted); cursor: pointer; font-size: 1rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition), color var(--transition);
+}
+.closeBtn:hover { background: var(--color-surface-2); color: var(--color-text); }
+
+.modalForm {
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.selectLabel {
+  display: block; font-size: 0.875rem; font-weight: 500;
+  color: var(--color-text); margin-bottom: 0.375rem;
+}
+.select {
+  width: 100%; padding: 0.625rem 0.875rem;
+  border: 1.5px solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-surface); color: var(--color-text);
+  font-size: 0.9375rem; outline: none;
+  transition: border-color var(--transition);
+}
+.select:focus { border-color: var(--color-primary); }
+
+.textarea {
+  width: 100%; padding: 0.625rem 0.875rem;
+  border: 1.5px solid var(--color-border); border-radius: var(--radius-md);
+  background: var(--color-surface); color: var(--color-text);
+  font-size: 0.9375rem; resize: vertical; outline: none;
+  font-family: var(--font-sans);
+  transition: border-color var(--transition);
+}
+.textarea:focus { border-color: var(--color-primary); }
+
+.checkboxRow {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.9rem; cursor: pointer;
+}
+
+.modalActions {
+  display: flex; justify-content: flex-end; gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* ── Inline form (categories) ── */
+.inlineForm {
+  background: var(--color-surface-2);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end;
+}
+
+/* ── Status select (orders) ── */
+.statusSelect {
+  padding: 0.3rem 0.6rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  cursor: pointer;
+  outline: none;
+}
+.statusSelect:focus { border-color: var(--color-primary); }

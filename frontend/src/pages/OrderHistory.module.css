@@ -1,0 +1,60 @@
+.page { padding: 2.5rem 0 4rem; }
+.title { font-size: 1.75rem; font-weight: 700; margin-bottom: 2rem; }
+
+.empty {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  padding: 6rem 1rem; text-align: center; color: var(--color-text-muted);
+}
+.empty h2 { font-size: 1.5rem; font-weight: 700; color: var(--color-text); }
+.link { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+
+.list { display: flex; flex-direction: column; gap: 1rem; }
+
+.order {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition);
+}
+.order:hover { box-shadow: var(--shadow-md); }
+
+.orderHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.orderMeta  { display: flex; flex-direction: column; gap: 0.25rem; }
+.orderId    { font-weight: 700; font-size: 0.9375rem; }
+.orderDate  { font-size: 0.8125rem; color: var(--color-text-muted); }
+
+.orderRight { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.orderTotal { font-weight: 700; font-size: 0.9375rem; }
+.chevron    { color: var(--color-text-muted); font-size: 1rem; transition: transform var(--transition); }
+
+.orderBody {
+  border-top: 1px solid var(--color-border);
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.items, .shipping { display: flex; flex-direction: column; gap: 0.5rem; }
+.itemsTitle { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-muted); margin-bottom: 0.25rem; }
+
+.item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.9rem; }
+.itemName  { flex: 1; color: var(--color-text); }
+.itemQty   { color: var(--color-text-muted); }
+.itemPrice { font-weight: 600; }
+
+.address {
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
