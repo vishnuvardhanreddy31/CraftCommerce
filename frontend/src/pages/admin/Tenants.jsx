@@ -42,6 +42,15 @@ export default function AdminTenants() {
 
   useEffect(() => { load() }, [load])
 
+  useEffect(() => {
+    if (!showModal) return
+    const onKey = (event) => {
+      if (event.key === 'Escape') setShowModal(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [showModal])
+
   const openCreate = () => {
     setForm(EMPTY_FORM)
     setShowModal(true)
@@ -51,7 +60,10 @@ export default function AdminTenants() {
 
   const handleSave = async (e) => {
     e.preventDefault()
-    if (!form.store_name.trim() || !form.slug.trim() || !form.owner_email.trim()) return
+    if (!form.store_name.trim() || !form.slug.trim() || !form.owner_email.trim()) {
+      toastError('Store name, slug, and owner email are required.')
+      return
+    }
     setSaving(true)
     try {
       const payload = {

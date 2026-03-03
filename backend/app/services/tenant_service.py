@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
@@ -35,9 +35,22 @@ class TenantService:
 
         return TenantResponse(**doc_to_response(tenant_doc))
 
-    async def list_tenants(self, skip: int = 0, limit: int = 200) -> list[TenantResponse]:
-        """Return tenants with basic skip/limit pagination."""
-        cursor = self.db.tenants.find().sort("store_name", 1).skip(skip).limit(limit)
+    async def list_tenants(self, skip: int = 0, limit: int = 200, after_id: Optional[str] = None) -> list[TenantResponse]:
+        """Return tenants with basic skip/limit or cursor pagination."""
+        query: dict[str, Any] = {}
+        sort = [("store_name", 1)]
+        if after_id:
+            from bson import ObjectId
+
+            try:
+                oid = ObjectId(after_id)
+            except Exception:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid after_id")
+            query["_id"] = {"$gt": oid}
+            sort = [("_id", 1)]
+            skip = 0
+
+        cursor = self.db.tenants.find(query).sort(sort).skip(skip).limit(limit)
         docs = await cursor.to_list(length=limit)
         return [TenantResponse(**doc_to_response(doc)) for doc in docs]
 
