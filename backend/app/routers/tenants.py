@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.database import get_database
@@ -32,6 +32,8 @@ async def list_tenants(
     _: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
+    if after_id and skip:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="skip cannot be used with after_id")
     service = TenantService(db)
     return await service.list_tenants(skip=skip, limit=limit, after_id=after_id)
 

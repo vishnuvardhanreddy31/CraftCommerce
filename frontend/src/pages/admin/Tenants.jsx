@@ -15,6 +15,7 @@ const EMPTY_FORM = {
   currency: 'USD',
   timezone: 'UTC'
 }
+const TENANT_PAGE_SIZE = 200
 
 
 export default function AdminTenants() {
@@ -30,7 +31,7 @@ export default function AdminTenants() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const { data } = await client.get('/api/tenants')
+      const { data } = await client.get(`/api/tenants?limit=${TENANT_PAGE_SIZE}`)
       setTenants(data || [])
     } catch (err) {
       console.error('Failed to load tenants:', err)
@@ -56,7 +57,7 @@ export default function AdminTenants() {
     setShowModal(true)
   }
 
-  const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }))
+  const handleFieldChange = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }))
 
   const handleSave = async (e) => {
     e.preventDefault()
@@ -179,19 +180,19 @@ export default function AdminTenants() {
               <button className={styles.closeBtn} onClick={() => setShowModal(false)}>✕</button>
             </div>
             <form onSubmit={handleSave} className={styles.modalForm}>
-              <Input label="Store Name *" value={form.store_name} onChange={set('store_name')} required />
-              <Input label="Store Slug *" value={form.slug} onChange={set('slug')} placeholder="artisan-crafts" required />
-              <Input label="Owner Email *" type="email" value={form.owner_email} onChange={set('owner_email')} required />
+              <Input label="Store Name *" value={form.store_name} onChange={handleFieldChange('store_name')} required />
+              <Input label="Store Slug *" value={form.slug} onChange={handleFieldChange('slug')} placeholder="artisan-crafts" required />
+              <Input label="Owner Email *" type="email" value={form.owner_email} onChange={handleFieldChange('owner_email')} required />
               <div className={styles.row2}>
                 <div>
                   <label className={styles.selectLabel}>Currency</label>
-                  <select className={styles.select} value={form.currency} onChange={set('currency')}>
+                  <select className={styles.select} value={form.currency} onChange={handleFieldChange('currency')}>
                     {TENANT_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className={styles.selectLabel}>Timezone</label>
-                  <select className={styles.select} value={form.timezone} onChange={set('timezone')}>
+                  <select className={styles.select} value={form.timezone} onChange={handleFieldChange('timezone')}>
                     {TENANT_TIMEZONES.map((tz) => <option key={tz} value={tz}>{tz}</option>)}
                   </select>
                 </div>
