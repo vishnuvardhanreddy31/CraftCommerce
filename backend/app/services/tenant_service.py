@@ -47,10 +47,11 @@ class TenantService:
         sort = [("store_name", 1)]
         if after_id:
             from bson import ObjectId
+            from bson.errors import InvalidId
 
             try:
                 oid = ObjectId(after_id)
-            except Exception:
+            except (InvalidId, TypeError):
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Invalid after_id: must be a valid ObjectId format",
@@ -65,10 +66,11 @@ class TenantService:
 
     async def get_tenant(self, tenant_id: str) -> TenantResponse:
         from bson import ObjectId
+        from bson.errors import InvalidId
 
         try:
             oid = ObjectId(tenant_id)
-        except Exception:
+        except (InvalidId, TypeError):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
 
         tenant = await self.db.tenants.find_one({"_id": oid})
@@ -81,10 +83,11 @@ class TenantService:
 
     async def update_tenant(self, tenant_id: str, data: TenantUpdate) -> TenantResponse:
         from bson import ObjectId
+        from bson.errors import InvalidId
 
         try:
             oid = ObjectId(tenant_id)
-        except Exception:
+        except (InvalidId, TypeError):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
 
         updates = {k: v for k, v in data.model_dump().items() if v is not None}
@@ -103,10 +106,11 @@ class TenantService:
     async def deactivate_tenant(self, tenant_id: str) -> TenantResponse:
         """Soft-deactivate a tenant by setting ``is_active`` to False."""
         from bson import ObjectId
+        from bson.errors import InvalidId
 
         try:
             oid = ObjectId(tenant_id)
-        except Exception:
+        except (InvalidId, TypeError):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
 
         result = await self.db.tenants.find_one_and_update(

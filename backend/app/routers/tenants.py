@@ -5,7 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.database import get_database
 from app.core.security import require_role
-from app.core.constants import DEFAULT_TENANT_LIST_LIMIT
+from app.core.constants import DEFAULT_TENANT_LIST_LIMIT, MAX_TENANT_LIST_LIMIT
 from app.models.configuration import TenantConfig
 from app.schemas.configuration import TenantConfigResponse
 from app.schemas.tenant import TenantCreate, TenantResponse, TenantUpdate
@@ -29,7 +29,7 @@ async def create_tenant(
 async def list_tenants(
     skip: int = Query(0, ge=0),
     after_id: str | None = Query(None),
-    limit: int = Query(DEFAULT_TENANT_LIST_LIMIT, ge=1, le=500),
+    limit: int = Query(DEFAULT_TENANT_LIST_LIMIT, ge=1, le=MAX_TENANT_LIST_LIMIT),
     admin_user: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):

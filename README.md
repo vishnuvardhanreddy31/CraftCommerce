@@ -230,6 +230,7 @@ The frontend will be available at http://localhost:5173.
 |---|---|---|
 | `VITE_API_URL` | `http://localhost:8000` | Backend base URL |
 | `VITE_TENANT_ID` | `default` | Default tenant ID |
+| `VITE_TENANT_LIST_LIMIT` | `200` | Max tenants fetched per admin request (keep aligned with backend default) |
 
 ---
 
