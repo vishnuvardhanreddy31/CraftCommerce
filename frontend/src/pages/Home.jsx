@@ -14,10 +14,10 @@ export default function Home() {
     const load = async () => {
       try {
         const [productsRes, catsRes] = await Promise.all([
-          client.get('/api/products?limit=8&featured=true'),
+          client.get('/api/products?page=1&page_size=8'),
           client.get('/api/categories')
         ])
-        setFeatured(productsRes.data.results || productsRes.data || [])
+        setFeatured(productsRes.data.items || [])
         setCategories((catsRes.data.results || catsRes.data || []).slice(0, 6))
       } catch {
         /* leave empty – graceful degradation */
@@ -82,7 +82,7 @@ export default function Home() {
                 {categories.map((cat) => (
                   <Link
                     key={cat.id}
-                    to={`/products?category=${cat.slug || cat.id}`}
+                    to={`/products?category=${cat.id}`}
                     className={styles.categoryCard}
                   >
                     <span className={styles.categoryEmoji} aria-hidden="true">

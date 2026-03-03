@@ -9,7 +9,7 @@ import styles from './AdminTable.module.css'
 
 const EMPTY_FORM = {
   name: '', description: '', price: '', stock: '',
-  category: '', image: '', sku: '', is_active: true
+  category_id: '', image_url: '', sku: '', is_active: true
 }
 
 export default function AdminProducts() {
@@ -28,10 +28,10 @@ export default function AdminProducts() {
     setLoading(true)
     try {
       const [pRes, cRes] = await Promise.all([
-        client.get('/api/products?limit=100'),
+        client.get('/api/products?page=1&page_size=100'),
         client.get('/api/categories')
       ])
-      setProducts(pRes.data.results || pRes.data || [])
+      setProducts(pRes.data.items || [])
       setCategories(cRes.data.results || cRes.data || [])
     } catch {
       toastError('Failed to load products')
@@ -47,8 +47,9 @@ export default function AdminProducts() {
     setEditProduct(p)
     setForm({
       name: p.name, description: p.description || '', price: p.price,
-      stock: p.stock ?? '', category: p.category || '', image: p.image || '',
-      sku: p.sku || '', is_active: p.is_active ?? true
+      stock: p.stock ?? '', category_id: p.category_id || '',
+      image_url: p.images?.[0] || '', sku: p.sku || '',
+      is_active: p.is_active ?? true
     })
     setShowModal(true)
   }
@@ -58,7 +59,16 @@ export default function AdminProducts() {
     if (!form.name.trim()) return
     setSaving(true)
     try {
-      const payload = { ...form, price: parseFloat(form.price), stock: parseInt(form.stock) || 0 }
+      const payload = {
+        name: form.name.trim(),
+        description: form.description || '',
+        price: parseFloat(form.price),
+        stock: parseInt(form.stock) || 0,
+        category_id: form.category_id || null,
+        sku: form.sku || null,
+        is_active: form.is_active,
+        images: form.image_url ? [form.image_url.trim()] : []
+      }
       if (editProduct) {
         await client.put(`/api/products/${editProduct.id}`, payload)
         success('Product updated')
@@ -123,10 +133,14 @@ export default function AdminProducts() {
                   <tr key={p.id}>
                     <td>
                       <div className={styles.productCell}>
-                        {p.image && <img src={p.image} alt="" className={styles.thumb} loading="lazy" />}
+                        {p.images?.[0] && <img src={p.images[0]} alt="" className={styles.thumb} loading="lazy" />}
                         <div>
                           <p className={styles.productName}>{p.name}</p>
-                          {p.category_name && <p className={styles.productCat}>{p.category_name}</p>}
+                          {p.category_id && (
+                            <p className={styles.productCat}>
+                              {categories.find((c) => c.id === p.category_id)?.name || p.category_id}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </td>
@@ -177,12 +191,12 @@ export default function AdminProducts() {
               </div>
               <div>
                 <label className={styles.selectLabel}>Category</label>
-                <select className={styles.select} value={form.category} onChange={set('category')}>
+                <select className={styles.select} value={form.category_id} onChange={set('category_id')}>
                   <option value="">— None —</option>
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
-              <Input label="Image URL" type="url" value={form.image} onChange={set('image')} placeholder="https://…" />
+              <Input label="Image URL" type="url" value={form.image_url} onChange={set('image_url')} placeholder="https://…" />
               <div>
                 <label className={styles.selectLabel}>Description</label>
                 <textarea

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import client from '../api/client.js'
 import ProductGrid from '../components/Product/ProductGrid.jsx'
@@ -25,27 +25,45 @@ export default function ProductListing() {
   const q        = searchParams.get('q')        || ''
   const category = searchParams.get('category') || ''
   const sort     = searchParams.get('sort')     || ''
-  const limit    = 12
+  const pageSize = 12
+
+  const categoryMap = useMemo(
+    () => new Map(categories.map((c) => [c.id, c.name])),
+    [categories]
+  )
+
+  const sortConfig = useMemo(() => ({
+    price_asc: { sort_by: 'price', sort_order: 1 },
+    price_desc: { sort_by: 'price', sort_order: -1 },
+    '-created_at': { sort_by: '_id', sort_order: -1 }
+  }), [])
 
   const fetchProducts = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
       if (q)        params.set('search',   q)
-      if (category) params.set('category', category)
-      if (sort)     params.set('ordering', sort)
-      params.set('limit',  String(limit))
-      params.set('offset', String((page - 1) * limit))
+      const selectedCategory = categories.find((c) => c.id === category || c.slug === category)
+      if (selectedCategory) params.set('category_id', selectedCategory.id)
+      const sortPayload = sortConfig[sort] || { sort_by: 'name', sort_order: 1 }
+      params.set('sort_by', sortPayload.sort_by)
+      params.set('sort_order', String(sortPayload.sort_order))
+      params.set('page',  String(page))
+      params.set('page_size', String(pageSize))
 
       const { data } = await client.get(`/api/products?${params}`)
-      setProducts(data.results || data || [])
-      setTotal(data.count || (data.results || data || []).length)
+      const items = data.items || []
+      setProducts(items.map((item) => ({
+        ...item,
+        category_name: categoryMap.get(item.category_id) || item.category_name
+      })))
+      setTotal(data.total || items.length)
     } catch {
       setProducts([])
     } finally {
       setLoading(false)
     }
-  }, [q, category, sort, page])
+  }, [q, category, sort, page, pageSize, categories, categoryMap, sortConfig])
 
   useEffect(() => { fetchProducts() }, [fetchProducts])
 
@@ -63,7 +81,7 @@ export default function ProductListing() {
     setSearchParams(next)
   }
 
-  const totalPages = Math.ceil(total / limit)
+  const totalPages = Math.ceil(total / pageSize)
 
   return (
     <div className={`page-enter ${styles.page}`}>
@@ -93,7 +111,7 @@ export default function ProductListing() {
           >
             <option value="">All Categories</option>
             {categories.map((c) => (
-              <option key={c.id} value={c.slug || c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
 

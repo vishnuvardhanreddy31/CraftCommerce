@@ -11,6 +11,7 @@ import styles from './Settings.module.css'
 export default function AdminSettings() {
   const { theme, updateTheme } = useTheme()
   const { success, error: toastError } = useToast()
+  const tenantId = localStorage.getItem('cc_tenant_id') || import.meta.env.VITE_TENANT_ID || 'default'
 
   const [form, setForm] = useState({
     storeName: '', logoUrl: '', primaryColor: '', secondaryColor: '',
@@ -20,16 +21,18 @@ export default function AdminSettings() {
   const [fetching, setFetching] = useState(true)
 
   useEffect(() => {
-    client.get('/api/tenant/config')
+    client.get(`/api/tenants/${tenantId}`)
       .then(({ data }) => {
+        const themeConfig = data.theme_config || {}
+        const taxConfig = data.tax_config || {}
         setForm({
-          storeName:      data.storeName      || '',
-          logoUrl:        data.logoUrl        || '',
-          primaryColor:   data.primaryColor   || '#6366f1',
-          secondaryColor: data.secondaryColor || '#8b5cf6',
-          fontFamily:     data.fontFamily     || '',
-          currency:       data.currency       || 'USD',
-          taxRate:        data.taxRate        != null ? (data.taxRate * 100).toFixed(1) : '0'
+          storeName:      data.store_name      || '',
+          logoUrl:        data.logo            || '',
+          primaryColor:   themeConfig.primaryColor   || '#6366f1',
+          secondaryColor: themeConfig.secondaryColor || '#8b5cf6',
+          fontFamily:     themeConfig.fontFamily     || '',
+          currency:       data.currency        || 'USD',
+          taxRate:        taxConfig.enabled ? (taxConfig.rate || 0).toFixed(1) : '0'
         })
       })
       .catch(() => {

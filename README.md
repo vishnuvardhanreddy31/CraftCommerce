@@ -197,6 +197,9 @@ npm run dev
 
 The frontend will be available at http://localhost:5173.
 
+> To serve the frontend statically from FastAPI, run `npm run build` in `frontend/`
+> and start the backend. When `frontend/dist` exists, FastAPI will serve it at `/`.
+
 ---
 
 ## Environment Variables

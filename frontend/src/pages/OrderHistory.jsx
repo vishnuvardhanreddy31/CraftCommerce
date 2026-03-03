@@ -24,7 +24,7 @@ export default function OrderHistory() {
 
   useEffect(() => {
     client.get('/api/orders')
-      .then(({ data }) => setOrders(data.results || data || []))
+      .then(({ data }) => setOrders(data.items || []))
       .catch(() => setOrders([]))
       .finally(() => setLoading(false))
   }, [])
@@ -65,16 +65,18 @@ export default function OrderHistory() {
                 <div className={styles.orderMeta}>
                   <span className={styles.orderId}>Order #{order.id}</span>
                   <span className={styles.orderDate}>
-                    {new Date(order.created_at).toLocaleDateString('en-US', {
-                      year: 'numeric', month: 'short', day: 'numeric'
-                    })}
+                    {order.created_at
+                      ? new Date(order.created_at).toLocaleDateString('en-US', {
+                          year: 'numeric', month: 'short', day: 'numeric'
+                        })
+                      : '—'}
                   </span>
                 </div>
                 <div className={styles.orderRight}>
                   <Badge variant={STATUS_VARIANT[order.status] || 'default'}>
                     {order.status || 'pending'}
                   </Badge>
-                  <span className={styles.orderTotal}>{fmt(order.total_amount)}</span>
+                   <span className={styles.orderTotal}>{fmt(order.total)}</span>
                   <span className={styles.chevron} style={{ transform: expanded === order.id ? 'rotate(180deg)' : '' }}>
                     ▾
                   </span>
@@ -91,7 +93,7 @@ export default function OrderHistory() {
                         <div key={i} className={styles.item}>
                           <span className={styles.itemName}>{item.name || `Product #${item.product_id}`}</span>
                           <span className={styles.itemQty}>× {item.quantity}</span>
-                          <span className={styles.itemPrice}>{fmt(item.price * item.quantity)}</span>
+                           <span className={styles.itemPrice}>{fmt(item.total_price ?? item.unit_price * item.quantity)}</span>
                         </div>
                       ))}
                     </div>
