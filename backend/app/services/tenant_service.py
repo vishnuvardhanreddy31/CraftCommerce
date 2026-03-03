@@ -35,6 +35,11 @@ class TenantService:
 
         return TenantResponse(**doc_to_response(tenant_doc))
 
+    async def list_tenants(self, limit: int = 200) -> list[TenantResponse]:
+        cursor = self.db.tenants.find().sort("store_name", 1).limit(limit)
+        docs = await cursor.to_list(length=limit)
+        return [TenantResponse(**doc_to_response(doc)) for doc in docs]
+
     async def get_tenant(self, tenant_id: str) -> TenantResponse:
         from bson import ObjectId
 
@@ -66,6 +71,23 @@ class TenantService:
         result = await self.db.tenants.find_one_and_update(
             {"_id": oid},
             {"$set": updates},
+            return_document=True,
+        )
+        if not result:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
+        return TenantResponse(**doc_to_response(result))
+
+    async def deactivate_tenant(self, tenant_id: str) -> TenantResponse:
+        from bson import ObjectId
+
+        try:
+            oid = ObjectId(tenant_id)
+        except Exception:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
+
+        result = await self.db.tenants.find_one_and_update(
+            {"_id": oid},
+            {"$set": {"is_active": False}},
             return_document=True,
         )
         if not result:

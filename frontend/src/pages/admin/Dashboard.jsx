@@ -53,6 +53,7 @@ export default function Dashboard() {
             <Link to="/admin/categories" className={styles.adminLink}>Categories</Link>
             <Link to="/admin/orders"     className={styles.adminLink}>Orders</Link>
             <Link to="/admin/settings"   className={styles.adminLink}>Settings</Link>
+            <Link to="/admin/tenants"    className={styles.adminLink}>Tenants</Link>
           </div>
         </div>
 

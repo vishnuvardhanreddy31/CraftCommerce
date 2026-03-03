@@ -43,6 +43,7 @@ A production-ready **multi-tenant SaaS eCommerce platform** built with FastAPI, 
 
 - **Multi-tenant** architecture — each store is fully isolated by `tenant_id`
 - **Tenant onboarding** — store name, logo, theme config (colors, fonts), currency, tax config
+- **Tenant management** — platform admins can add or deactivate tenant stores
 - **Per-tenant admin dashboard** — Products, Categories, Orders, Store Settings
 - **Public storefront** — product listing (pagination, filtering, sorting), product detail, cart, checkout, order history
 - **Role-based access** — Admin, Vendor, Customer
@@ -254,9 +255,11 @@ Or resolve via subdomain (`<slug>.craftcommerce.com`).
 | `POST` | `/api/auth/login` | Login (returns JWT) | — |
 | `POST` | `/api/auth/refresh` | Refresh token | — |
 | `GET` | `/api/auth/me` | Get current user | ✓ |
-| `POST` | `/api/tenants/` | Create tenant (onboarding) | — |
+| `POST` | `/api/tenants/` | Create tenant (onboarding) | Admin |
+| `GET` | `/api/tenants/` | List tenants | Admin |
 | `GET` | `/api/tenants/{id}` | Get tenant info | — |
 | `PUT` | `/api/tenants/{id}` | Update tenant settings | Admin |
+| `DELETE` | `/api/tenants/{id}` | Deactivate tenant | Admin |
 | `GET` | `/api/tenants/{id}/config` | Get theme config | — |
 | `GET` | `/api/products/` | List products (paginated) | — |
 | `GET` | `/api/products/{id}` | Product detail | — |
@@ -322,6 +325,15 @@ MONGODB_URL=mongodb://localhost:27017 python seed.py
 ---
 
 ## Demo Credentials
+
+### Platform Admin Access
+Use the admin credentials below to access the admin dashboard and manage tenants at `/admin/tenants`.
+
+**Tenant 1 ID:** `64a0000000000000000000a1`
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@artisancrafts.com | Admin@1234 |
 
 ### Tenant 1 — Artisan Crafts Co.
 **Tenant ID:** `64a0000000000000000000a1`
