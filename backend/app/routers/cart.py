@@ -12,7 +12,7 @@ from app.utils.exceptions import require_tenant
 router = APIRouter(prefix="/api/cart", tags=["cart"])
 
 
-@router.get("/", response_model=CartResponse)
+@router.get("", response_model=CartResponse)
 async def get_cart(
     request: Request,
     current_user: dict = Depends(get_current_user),
@@ -60,7 +60,7 @@ async def remove_item(
     return await service.remove_item(tenant_id, current_user["id"], product_id)
 
 
-@router.delete("/", response_model=CartResponse)
+@router.delete("", response_model=CartResponse)
 async def clear_cart(
     request: Request,
     current_user: dict = Depends(get_current_user),

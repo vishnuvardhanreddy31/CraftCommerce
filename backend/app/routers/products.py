@@ -14,7 +14,7 @@ from app.utils.exceptions import require_tenant
 router = APIRouter(prefix="/api/products", tags=["products"])
 
 
-@router.get("/", response_model=ProductListResponse)
+@router.get("", response_model=ProductListResponse)
 async def list_products(
     request: Request,
     page: int = Query(default=1, ge=1),
@@ -55,7 +55,7 @@ async def get_product(
     return await service.get_product(tenant_id, product_id)
 
 
-@router.post("/", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 async def create_product(
     data: ProductCreate,
     request: Request,

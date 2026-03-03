@@ -14,7 +14,7 @@ from app.utils.helpers import doc_to_response
 router = APIRouter(prefix="/api/tenants", tags=["tenants"])
 
 
-@router.post("/", response_model=TenantResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=TenantResponse, status_code=status.HTTP_201_CREATED)
 async def create_tenant(
     data: TenantCreate,
     db: AsyncIOMotorDatabase = Depends(get_database),

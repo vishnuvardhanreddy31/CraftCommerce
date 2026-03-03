@@ -14,7 +14,7 @@ from app.utils.exceptions import require_tenant
 router = APIRouter(prefix="/api/categories", tags=["categories"])
 
 
-@router.get("/", response_model=List[CategoryResponse])
+@router.get("", response_model=List[CategoryResponse])
 async def list_categories(
     request: Request,
     include_inactive: bool = Query(default=False),
@@ -25,7 +25,7 @@ async def list_categories(
     return await service.list_categories(tenant_id, include_inactive=include_inactive)
 
 
-@router.post("/", response_model=CategoryResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=CategoryResponse, status_code=status.HTTP_201_CREATED)
 async def create_category(
     data: CategoryCreate,
     request: Request,
