@@ -79,14 +79,15 @@ export default function Navbar() {
                   </p>
                   <hr className={styles.dropdownDivider} />
                   <Link to="/orders" className={styles.dropdownItem} onClick={close}>My Orders</Link>
-                  {user.role === 'admin' && (
-                    <>
-                      <Link to="/admin" className={styles.dropdownItem} onClick={close}>Admin Dashboard</Link>
-                      <Link to="/admin/products" className={styles.dropdownItem} onClick={close}>Products</Link>
-                      <Link to="/admin/orders" className={styles.dropdownItem} onClick={close}>Orders</Link>
-                      <Link to="/admin/settings" className={styles.dropdownItem} onClick={close}>Settings</Link>
-                    </>
-                  )}
+                    {user.role === 'admin' && (
+                      <>
+                        <Link to="/admin" className={styles.dropdownItem} onClick={close}>Admin Dashboard</Link>
+                        <Link to="/admin/tenants" className={styles.dropdownItem} onClick={close}>Tenants</Link>
+                        <Link to="/admin/products" className={styles.dropdownItem} onClick={close}>Products</Link>
+                        <Link to="/admin/orders" className={styles.dropdownItem} onClick={close}>Orders</Link>
+                        <Link to="/admin/settings" className={styles.dropdownItem} onClick={close}>Settings</Link>
+                      </>
+                    )}
                   <hr className={styles.dropdownDivider} />
                   <button className={styles.dropdownLogout} onClick={handleLogout}>
                     Sign Out
@@ -118,15 +119,16 @@ export default function Navbar() {
           <NavLink to="/products" className={styles.mobileLink} onClick={close}>Products</NavLink>
           <NavLink to="/cart"     className={styles.mobileLink} onClick={close}>Cart {totalItems > 0 && `(${totalItems})`}</NavLink>
           {user && <NavLink to="/orders" className={styles.mobileLink} onClick={close}>Orders</NavLink>}
-          {user?.role === 'admin' && (
-            <>
-              <NavLink to="/admin"            className={styles.mobileLink} onClick={close}>Dashboard</NavLink>
-              <NavLink to="/admin/products"   className={styles.mobileLink} onClick={close}>Admin Products</NavLink>
-              <NavLink to="/admin/categories" className={styles.mobileLink} onClick={close}>Categories</NavLink>
-              <NavLink to="/admin/orders"     className={styles.mobileLink} onClick={close}>Admin Orders</NavLink>
-              <NavLink to="/admin/settings"   className={styles.mobileLink} onClick={close}>Settings</NavLink>
-            </>
-          )}
+            {user?.role === 'admin' && (
+              <>
+                <NavLink to="/admin"            className={styles.mobileLink} onClick={close}>Dashboard</NavLink>
+                <NavLink to="/admin/tenants"    className={styles.mobileLink} onClick={close}>Tenants</NavLink>
+                <NavLink to="/admin/products"   className={styles.mobileLink} onClick={close}>Admin Products</NavLink>
+                <NavLink to="/admin/categories" className={styles.mobileLink} onClick={close}>Categories</NavLink>
+                <NavLink to="/admin/orders"     className={styles.mobileLink} onClick={close}>Admin Orders</NavLink>
+                <NavLink to="/admin/settings"   className={styles.mobileLink} onClick={close}>Settings</NavLink>
+              </>
+            )}
           {user ? (
             <button className={styles.mobileLogout} onClick={handleLogout}>Sign Out</button>
           ) : (

@@ -7,11 +7,6 @@ import Input from '../components/UI/Input.jsx'
 import Card from '../components/UI/Card.jsx'
 import styles from './Auth.module.css'
 
-const DEMO_USERS = [
-  { label: 'Admin',    email: 'admin@artisancrafts.com',  password: 'Admin@1234',    tenantId: '64a0000000000000000000a1' },
-  { label: 'Customer', email: 'customer@example.com',     password: 'Customer@1234', tenantId: '64a0000000000000000000a1' },
-]
-
 export default function Login() {
   const { login } = useAuth()
   const { success, error: toastError } = useToast()
@@ -22,11 +17,6 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
 
   const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }))
-
-  const fillDemo = (demo) => {
-    setForm({ email: demo.email, password: demo.password, tenant_id: demo.tenantId })
-    setErrors({})
-  }
 
   const validate = () => {
     const e = {}
@@ -64,17 +54,6 @@ export default function Login() {
           </svg>
           <h1 className={styles.title}>Welcome back</h1>
           <p className={styles.sub}>Sign in to your CraftCommerce account</p>
-        </div>
-
-        <div className={styles.demoBox}>
-          <p className={styles.demoLabel}>Try a demo account:</p>
-          <div className={styles.demoButtons}>
-            {DEMO_USERS.map((d) => (
-              <button key={d.label} type="button" className={styles.demoBtn} onClick={() => fillDemo(d)}>
-                {d.label}
-              </button>
-            ))}
-          </div>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>

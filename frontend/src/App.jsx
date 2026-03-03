@@ -18,6 +18,7 @@ import AdminProducts from './pages/admin/Products.jsx'
 import AdminCategories from './pages/admin/Categories.jsx'
 import AdminOrders from './pages/admin/Orders.jsx'
 import AdminSettings from './pages/admin/Settings.jsx'
+import AdminTenants from './pages/admin/Tenants.jsx'
 import { useAuth } from './hooks/useAuth.js'
 
 function ProtectedRoute({ children, adminOnly = false }) {
@@ -59,6 +60,9 @@ function AppRoutes() {
       } />
       <Route path="/admin/settings" element={
         <ProtectedRoute adminOnly><AdminSettings /></ProtectedRoute>
+      } />
+      <Route path="/admin/tenants" element={
+        <ProtectedRoute adminOnly><AdminTenants /></ProtectedRoute>
       } />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

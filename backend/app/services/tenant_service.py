@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Any, Optional
 
 from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
+from app.core.constants import DEFAULT_TENANT_LIST_LIMIT
 from app.models.configuration import TenantConfig
 from app.schemas.tenant import TenantCreate, TenantResponse, TenantUpdate
 from app.utils.helpers import doc_to_response
@@ -35,12 +36,41 @@ class TenantService:
 
         return TenantResponse(**doc_to_response(tenant_doc))
 
+    async def list_tenants(
+        self,
+        skip: int = 0,
+        limit: int = DEFAULT_TENANT_LIST_LIMIT,
+        after_id: Optional[str] = None,
+    ) -> list[TenantResponse]:
+        """Return tenants with basic skip/limit or cursor pagination."""
+        query: dict[str, Any] = {}
+        sort = [("store_name", 1)]
+        if after_id:
+            from bson import ObjectId
+            from bson.errors import InvalidId
+
+            try:
+                oid = ObjectId(after_id)
+            except (InvalidId, TypeError):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid after_id: must be a valid ObjectId format",
+                )
+            query["_id"] = {"$gt": oid}
+            sort = [("_id", 1)]
+            skip = 0
+
+        cursor = self.db.tenants.find(query).sort(sort).skip(skip).limit(limit)
+        docs = await cursor.to_list(length=limit)
+        return [TenantResponse(**doc_to_response(doc)) for doc in docs]
+
     async def get_tenant(self, tenant_id: str) -> TenantResponse:
         from bson import ObjectId
+        from bson.errors import InvalidId
 
         try:
             oid = ObjectId(tenant_id)
-        except Exception:
+        except (InvalidId, TypeError):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
 
         tenant = await self.db.tenants.find_one({"_id": oid})
@@ -53,10 +83,11 @@ class TenantService:
 
     async def update_tenant(self, tenant_id: str, data: TenantUpdate) -> TenantResponse:
         from bson import ObjectId
+        from bson.errors import InvalidId
 
         try:
             oid = ObjectId(tenant_id)
-        except Exception:
+        except (InvalidId, TypeError):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
 
         updates = {k: v for k, v in data.model_dump().items() if v is not None}
@@ -66,6 +97,25 @@ class TenantService:
         result = await self.db.tenants.find_one_and_update(
             {"_id": oid},
             {"$set": updates},
+            return_document=True,
+        )
+        if not result:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
+        return TenantResponse(**doc_to_response(result))
+
+    async def deactivate_tenant(self, tenant_id: str) -> TenantResponse:
+        """Soft-deactivate a tenant by setting ``is_active`` to False."""
+        from bson import ObjectId
+        from bson.errors import InvalidId
+
+        try:
+            oid = ObjectId(tenant_id)
+        except (InvalidId, TypeError):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Tenant not found")
+
+        result = await self.db.tenants.find_one_and_update(
+            {"_id": oid},
+            {"$set": {"is_active": False}},
             return_document=True,
         )
         if not result:
