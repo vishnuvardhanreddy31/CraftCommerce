@@ -83,11 +83,17 @@ export default function AdminTenants() {
     }
   }
 
-  const filtered = tenants.filter((t) =>
-    t.store_name.toLowerCase().includes(search.toLowerCase()) ||
-    t.slug.toLowerCase().includes(search.toLowerCase()) ||
-    t.owner_email.toLowerCase().includes(search.toLowerCase())
-  )
+  const filtered = tenants.filter((t) => {
+    const name = t.store_name || ''
+    const slug = t.slug || ''
+    const owner = t.owner_email || ''
+    const term = search.toLowerCase()
+    return (
+      name.toLowerCase().includes(term) ||
+      slug.toLowerCase().includes(term) ||
+      owner.toLowerCase().includes(term)
+    )
+  })
 
   return (
     <div className={`page-enter ${styles.page}`}>
