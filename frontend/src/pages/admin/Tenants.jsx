@@ -15,7 +15,7 @@ const EMPTY_FORM = {
   currency: 'USD',
   timezone: 'UTC'
 }
-const TENANT_PAGE_SIZE = 200
+const TENANT_LIST_LIMIT = 200
 
 
 export default function AdminTenants() {
@@ -31,7 +31,7 @@ export default function AdminTenants() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const { data } = await client.get(`/api/tenants?limit=${TENANT_PAGE_SIZE}`)
+      const { data } = await client.get(`/api/tenants?limit=${TENANT_LIST_LIMIT}`)
       setTenants(data || [])
     } catch (err) {
       console.error('Failed to load tenants:', err)

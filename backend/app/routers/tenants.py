@@ -5,6 +5,7 @@ from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.database import get_database
 from app.core.security import require_role
+from app.core.constants import DEFAULT_TENANT_LIST_LIMIT
 from app.models.configuration import TenantConfig
 from app.schemas.configuration import TenantConfigResponse
 from app.schemas.tenant import TenantCreate, TenantResponse, TenantUpdate
@@ -28,12 +29,15 @@ async def create_tenant(
 async def list_tenants(
     skip: int = Query(0, ge=0),
     after_id: str | None = Query(None),
-    limit: int = Query(200, ge=1, le=500),
+    limit: int = Query(DEFAULT_TENANT_LIST_LIMIT, ge=1, le=500),
     _: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     if after_id and skip:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="skip cannot be used with after_id")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot use skip parameter with after_id for cursor pagination. Use either skip or after_id.",
+        )
     service = TenantService(db)
     return await service.list_tenants(skip=skip, limit=limit, after_id=after_id)
 

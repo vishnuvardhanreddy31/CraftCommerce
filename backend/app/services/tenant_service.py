@@ -5,6 +5,7 @@ from typing import Any, Optional
 from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
+from app.core.constants import DEFAULT_TENANT_LIST_LIMIT
 from app.models.configuration import TenantConfig
 from app.schemas.tenant import TenantCreate, TenantResponse, TenantUpdate
 from app.utils.helpers import doc_to_response
@@ -35,7 +36,12 @@ class TenantService:
 
         return TenantResponse(**doc_to_response(tenant_doc))
 
-    async def list_tenants(self, skip: int = 0, limit: int = 200, after_id: Optional[str] = None) -> list[TenantResponse]:
+    async def list_tenants(
+        self,
+        skip: int = 0,
+        limit: int = DEFAULT_TENANT_LIST_LIMIT,
+        after_id: Optional[str] = None,
+    ) -> list[TenantResponse]:
         """Return tenants with basic skip/limit or cursor pagination."""
         query: dict[str, Any] = {}
         sort = [("store_name", 1)]
