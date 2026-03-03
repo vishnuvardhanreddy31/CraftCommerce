@@ -13,6 +13,9 @@ const DEFAULT_THEME = {
   taxRate: 0
 }
 
+const getTenantId = () =>
+  localStorage.getItem('cc_tenant_id') || import.meta.env.VITE_TENANT_ID || 'default'
+
 function applyTheme(theme) {
   const root = document.documentElement
   if (theme.primaryColor) {
@@ -35,8 +38,20 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await client.get('/api/tenant/config')
-        const merged = { ...DEFAULT_THEME, ...data }
+        const tenantId = getTenantId()
+        const { data } = await client.get(`/api/tenants/${tenantId}`)
+        const themeConfig = data.theme_config || {}
+        const taxConfig = data.tax_config || {}
+        const merged = {
+          ...DEFAULT_THEME,
+          storeName: data.store_name || DEFAULT_THEME.storeName,
+          logoUrl: data.logo || DEFAULT_THEME.logoUrl,
+          currency: data.currency || DEFAULT_THEME.currency,
+          taxRate: taxConfig.enabled ? (taxConfig.rate || 0) / 100 : 0,
+          primaryColor: themeConfig.primaryColor || DEFAULT_THEME.primaryColor,
+          secondaryColor: themeConfig.secondaryColor || DEFAULT_THEME.secondaryColor,
+          fontFamily: themeConfig.fontFamily || DEFAULT_THEME.fontFamily
+        }
         setTheme(merged)
         applyTheme(merged)
       } catch {
@@ -52,7 +67,23 @@ export function ThemeProvider({ children }) {
     const next = { ...theme, ...updates }
     setTheme(next)
     applyTheme(next)
-    await client.put('/api/tenant/config', next)
+    const tenantId = getTenantId()
+    const taxRate = Number.isFinite(next.taxRate) ? next.taxRate : 0
+    await client.put(`/api/tenants/${tenantId}`, {
+      store_name: next.storeName,
+      logo: next.logoUrl,
+      currency: next.currency,
+      tax_config: {
+        enabled: taxRate > 0,
+        rate: taxRate * 100,
+        inclusive: false
+      },
+      theme_config: {
+        primaryColor: next.primaryColor,
+        secondaryColor: next.secondaryColor,
+        fontFamily: next.fontFamily
+      }
+    })
   }
 
   return (

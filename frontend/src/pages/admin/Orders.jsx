@@ -19,14 +19,14 @@ export default function AdminOrders() {
   const [updating, setUpdating] = useState(null)
   const [page,     setPage]     = useState(1)
   const [total,    setTotal]    = useState(0)
-  const limit = 20
+  const pageSize = 20
 
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const { data } = await client.get(`/api/orders?limit=${limit}&offset=${(page-1)*limit}&ordering=-created_at`)
-      setOrders(data.results || data || [])
-      setTotal(data.count || (data.results || data || []).length)
+      const { data } = await client.get(`/api/orders?page=${page}&page_size=${pageSize}`)
+      setOrders(data.items || [])
+      setTotal(data.total || 0)
     } catch { toastError('Failed to load orders') }
     finally { setLoading(false) }
   }, [page]) // eslint-disable-line
@@ -36,14 +36,14 @@ export default function AdminOrders() {
   const updateStatus = async (orderId, status) => {
     setUpdating(orderId)
     try {
-      await client.patch(`/api/orders/${orderId}`, { status })
+      await client.put(`/api/orders/${orderId}/status`, { status })
       success('Status updated')
       setOrders((prev) => prev.map((o) => o.id === orderId ? { ...o, status } : o))
     } catch { toastError('Update failed') }
     finally { setUpdating(null) }
   }
 
-  const totalPages = Math.ceil(total / limit)
+  const totalPages = Math.ceil(total / pageSize)
 
   return (
     <div className={`page-enter ${styles.page}`}>
@@ -71,9 +71,9 @@ export default function AdminOrders() {
                   {orders.map((o) => (
                     <React.Fragment key={o.id}>
                       <tr>
-                        <td style={{ fontWeight: 600 }}>#{o.id}</td>
+                        <td style={{ fontWeight: 600 }}>#{o.order_number || o.id}</td>
                         <td>{o.customer_name || o.user_email || '—'}</td>
-                        <td className={styles.price}>${Number(o.total_amount || 0).toFixed(2)}</td>
+                        <td className={styles.price}>${Number(o.total || 0).toFixed(2)}</td>
                         <td>
                           <select
                             className={styles.statusSelect}
@@ -84,7 +84,9 @@ export default function AdminOrders() {
                             {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}
                           </select>
                         </td>
-                        <td className={styles.muted}>{new Date(o.created_at).toLocaleDateString()}</td>
+                        <td className={styles.muted}>
+                          {o.created_at ? new Date(o.created_at).toLocaleDateString() : '—'}
+                        </td>
                         <td>
                           <button
                             className={styles.editBtn}
@@ -100,7 +102,7 @@ export default function AdminOrders() {
                             <strong>Items:</strong>{' '}
                             {o.items?.map((i, idx) => (
                               <span key={idx} style={{ marginRight: '1rem' }}>
-                                {i.name || `#${i.product_id}`} ×{i.quantity} @ ${i.price}
+                                {i.name || `#${i.product_id}`} ×{i.quantity} @ ${i.unit_price}
                               </span>
                             )) || '—'}
                             {o.shipping_address && (

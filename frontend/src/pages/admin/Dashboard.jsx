@@ -20,11 +20,11 @@ export default function Dashboard() {
     const load = async () => {
       try {
         const [statsRes, ordersRes] = await Promise.all([
-          client.get('/api/admin/stats'),
-          client.get('/api/orders?limit=10&ordering=-created_at')
+          client.get('/api/admin/dashboard'),
+          client.get('/api/orders?page=1&page_size=10')
         ])
         setStats(statsRes.data)
-        setOrders(ordersRes.data.results || ordersRes.data || [])
+        setOrders(ordersRes.data.items || [])
       } catch {
         /* silent – show empty state */
       } finally {
@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   const cards = [
     { label: 'Total Orders',   value: stats?.total_orders   ?? '—', icon: '📦', color: '#6366f1' },
-    { label: 'Revenue',        value: stats?.revenue        != null ? `$${Number(stats.revenue).toLocaleString()}` : '—', icon: '💰', color: '#10b981' },
+    { label: 'Revenue',        value: stats?.total_revenue  != null ? `$${Number(stats.total_revenue).toLocaleString()}` : '—', icon: '💰', color: '#10b981' },
     { label: 'Products',       value: stats?.total_products ?? '—', icon: '🛍️',  color: '#8b5cf6' },
     { label: 'Customers',      value: stats?.total_users    ?? '—', icon: '👥', color: '#f59e0b' }
   ]
@@ -94,16 +94,16 @@ export default function Dashboard() {
                 <tbody>
                   {orders.map((o) => (
                     <tr key={o.id}>
-                      <td className={styles.orderId}>#{o.id}</td>
+                      <td className={styles.orderId}>#{o.order_number || o.id}</td>
                       <td>{o.customer_name || o.user_email || '—'}</td>
-                      <td className={styles.amount}>${Number(o.total_amount || 0).toFixed(2)}</td>
+                      <td className={styles.amount}>${Number(o.total || 0).toFixed(2)}</td>
                       <td>
                         <Badge variant={STATUS_VARIANT[o.status] || 'default'}>
                           {o.status || 'pending'}
                         </Badge>
                       </td>
                       <td className={styles.date}>
-                        {new Date(o.created_at).toLocaleDateString()}
+                        {o.created_at ? new Date(o.created_at).toLocaleDateString() : '—'}
                       </td>
                     </tr>
                   ))}

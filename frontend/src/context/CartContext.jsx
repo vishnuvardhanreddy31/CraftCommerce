@@ -6,6 +6,15 @@ export const CartContext = createContext(null)
 
 const LOCAL_KEY = 'cc_cart'
 
+const mapCartItems = (items) => items.map((item) => ({
+  product_id: item.product_id,
+  name: item.name,
+  sku: item.sku,
+  quantity: item.quantity,
+  price: item.unit_price ?? item.price,
+  image: item.image_url || item.image
+}))
+
 const readLocal = () => {
   try {
     return JSON.parse(localStorage.getItem(LOCAL_KEY)) || []
@@ -26,7 +35,7 @@ export function CartProvider({ children }) {
         setLoading(true)
         try {
           const { data } = await client.get('/api/cart')
-          setItems(data.items || [])
+          setItems(mapCartItems(data.items || []))
         } catch {
           setItems(readLocal())
         } finally {
@@ -46,16 +55,12 @@ export function CartProvider({ children }) {
     }
   }, [items, user])
 
-  const syncBackend = async (nextItems) => {
-    if (!user) return
-    try {
-      await client.put('/api/cart', { items: nextItems })
-    } catch {
-      /* silent – local state is source of truth in error cases */
-    }
-  }
-
   const addItem = useCallback(async (product, quantity = 1) => {
+    if (user) {
+      const { data } = await client.post('/api/cart/items', { product_id: product.id, quantity })
+      setItems(mapCartItems(data.items || []))
+      return
+    }
     setItems((prev) => {
       const existing = prev.find((i) => i.product_id === product.id)
       const next = existing
@@ -70,32 +75,33 @@ export function CartProvider({ children }) {
               product_id: product.id,
               name: product.name,
               price: product.price,
-              image: product.image,
+              image: product.images?.[0] || product.image,
               quantity
             }
           ]
-      syncBackend(next)
       return next
     })
   }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const removeItem = useCallback(async (productId) => {
-    setItems((prev) => {
-      const next = prev.filter((i) => i.product_id !== productId)
-      syncBackend(next)
-      return next
-    })
+    if (user) {
+      const { data } = await client.delete(`/api/cart/items/${productId}`)
+      setItems(mapCartItems(data.items || []))
+      return
+    }
+    setItems((prev) => prev.filter((i) => i.product_id !== productId))
   }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateQuantity = useCallback(async (productId, quantity) => {
     if (quantity < 1) { removeItem(productId); return }
-    setItems((prev) => {
-      const next = prev.map((i) =>
-        i.product_id === productId ? { ...i, quantity } : i
-      )
-      syncBackend(next)
-      return next
-    })
+    if (user) {
+      const { data } = await client.put(`/api/cart/items/${productId}`, { quantity })
+      setItems(mapCartItems(data.items || []))
+      return
+    }
+    setItems((prev) =>
+      prev.map((i) => i.product_id === productId ? { ...i, quantity } : i)
+    )
   }, [user, removeItem]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const clearCart = useCallback(async () => {

@@ -80,11 +80,10 @@ export default function Checkout() {
     try {
       const payload = {
         shipping_address: shipping,
-        items: items.map((i) => ({ product_id: i.product_id, quantity: i.quantity, price: i.price })),
-        total_amount: total
+        payment_method: 'mock'
         // payment info is mock – never send real card data
       }
-      const { data } = await client.post('/api/orders', payload)
+      await client.post('/api/checkout', payload)
       await clearCart()
       success('Order placed successfully! 🎉')
       navigate(`/orders`)

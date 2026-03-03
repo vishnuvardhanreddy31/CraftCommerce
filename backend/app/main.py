@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import Any, Dict
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.core.database import close_connection, create_indexes
@@ -53,6 +56,26 @@ app.include_router(orders.router)
 app.include_router(cart.router)
 app.include_router(checkout.router)
 app.include_router(admin.router)
+
+# ── Static frontend (optional) ───────────────────────────────────────────────
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
+
+if FRONTEND_DIST.exists():
+    assets_dir = FRONTEND_DIST / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/", include_in_schema=False)
+    async def serve_index() -> FileResponse:
+        return FileResponse(FRONTEND_DIST / "index.html")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def serve_spa(full_path: str) -> FileResponse:
+        if full_path.startswith("api") or full_path in {"docs", "redoc", "openapi.json", "health"}:
+            raise HTTPException(status_code=404)
+        return FileResponse(FRONTEND_DIST / "index.html")
 
 
 # ── Health check ──────────────────────────────────────────────────────────────

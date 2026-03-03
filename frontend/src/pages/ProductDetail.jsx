@@ -43,6 +43,8 @@ export default function ProductDetail() {
   const currency = theme.currency || 'USD'
   const price = new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(product.price)
   const images = product.images?.length ? product.images : product.image ? [product.image] : []
+  const categoryId = product.category_id || product.category
+  const categoryLabel = product.category_name || categoryId
 
   const inStock = product.stock === undefined || product.stock > 0
   const maxQty  = product.stock || 99
@@ -67,12 +69,16 @@ export default function ProductDetail() {
           <Link to="/" className={styles.crumb}>Home</Link>
           <span className={styles.sep}>›</span>
           <Link to="/products" className={styles.crumb}>Products</Link>
-          {product.category && (
+          {categoryLabel && (
             <>
               <span className={styles.sep}>›</span>
-              <Link to={`/products?category=${product.category_slug || product.category}`} className={styles.crumb}>
-                {product.category_name || product.category}
-              </Link>
+              {categoryId ? (
+                <Link to={`/products?category=${categoryId}`} className={styles.crumb}>
+                  {categoryLabel}
+                </Link>
+              ) : (
+                <span className={styles.crumb}>{categoryLabel}</span>
+              )}
             </>
           )}
           <span className={styles.sep}>›</span>

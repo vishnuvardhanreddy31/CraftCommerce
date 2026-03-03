@@ -8,6 +8,15 @@ import styles from './AdminTable.module.css'
 
 const EMPTY = { name: '', slug: '', description: '', emoji: '' }
 
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+
 export default function AdminCategories() {
   const { success, error: toastError } = useToast()
   const [cats,    setCats]    = useState([])
@@ -38,7 +47,11 @@ export default function AdminCategories() {
     if (!newForm.name.trim()) return
     setSaving(true)
     try {
-      await client.post('/api/categories', newForm)
+      const payload = {
+        ...newForm,
+        slug: (newForm.slug || slugify(newForm.name)).trim()
+      }
+      await client.post('/api/categories', payload)
       success('Category created')
       setShowNew(false); setNewForm(EMPTY); load()
     } catch (err) { toastError(err.response?.data?.detail || 'Create failed') }
@@ -48,7 +61,11 @@ export default function AdminCategories() {
   const handleUpdate = async (id) => {
     setSaving(true)
     try {
-      await client.put(`/api/categories/${id}`, form)
+      const payload = {
+        ...form,
+        slug: form.slug ? slugify(form.slug) : undefined
+      }
+      await client.put(`/api/categories/${id}`, payload)
       success('Category updated')
       setEditId(null); load()
     } catch (err) { toastError(err.response?.data?.detail || 'Update failed') }

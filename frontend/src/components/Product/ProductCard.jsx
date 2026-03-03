@@ -20,11 +20,14 @@ export default function ProductCard({ product }) {
 
   const isOutOfStock = product.stock !== undefined && product.stock <= 0
 
+  const imageUrl = product.images?.[0] || product.image || product.image_url
+  const categoryLabel = product.category_name || product.category_id || product.category
+
   return (
     <Link to={`/products/${product.id}`} className={styles.card}>
       <div className={styles.imageWrapper}>
-        {product.image ? (
-          <img src={product.image} alt={product.name} className={styles.image} loading="lazy" />
+        {imageUrl ? (
+          <img src={imageUrl} alt={product.name} className={styles.image} loading="lazy" />
         ) : (
           <div className={styles.imagePlaceholder} aria-hidden="true">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -39,8 +42,8 @@ export default function ProductCard({ product }) {
       </div>
 
       <div className={styles.body}>
-        {product.category && (
-          <p className={styles.category}>{product.category}</p>
+        {categoryLabel && (
+          <p className={styles.category}>{categoryLabel}</p>
         )}
         <h3 className={styles.name}>{product.name}</h3>
         {product.description && (
