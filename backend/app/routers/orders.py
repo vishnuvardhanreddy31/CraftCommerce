@@ -15,7 +15,7 @@ from app.utils.exceptions import require_tenant
 router = APIRouter(prefix="/api/orders", tags=["orders"])
 
 
-@router.get("/", response_model=OrderListResponse)
+@router.get("", response_model=OrderListResponse)
 async def list_orders(
     request: Request,
     page: int = Query(default=1, ge=1),
