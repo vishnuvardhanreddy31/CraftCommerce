@@ -5,6 +5,7 @@ import Button from '../../components/UI/Button.jsx'
 import Input from '../../components/UI/Input.jsx'
 import Badge from '../../components/UI/Badge.jsx'
 import Spinner from '../../components/UI/Spinner.jsx'
+import { TENANT_CURRENCIES, TENANT_TIMEZONES } from '../../constants/tenantOptions.js'
 import styles from './AdminTable.module.css'
 
 const EMPTY_FORM = {
@@ -15,8 +16,6 @@ const EMPTY_FORM = {
   timezone: 'UTC'
 }
 
-const CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'CHF', 'INR']
-const TIMEZONES = ['UTC', 'America/New_York', 'Europe/London', 'Asia/Kolkata', 'Asia/Tokyo']
 
 export default function AdminTenants() {
   const { success, error: toastError } = useToast()
@@ -33,7 +32,8 @@ export default function AdminTenants() {
     try {
       const { data } = await client.get('/api/tenants')
       setTenants(data || [])
-    } catch {
+    } catch (err) {
+      console.error('Failed to load tenants:', err)
       toastError('Failed to load tenants')
     } finally {
       setLoading(false)
@@ -78,7 +78,8 @@ export default function AdminTenants() {
       success('Tenant deactivated')
       setDeleteId(null)
       load()
-    } catch {
+    } catch (err) {
+      console.error('Failed to deactivate tenant:', err)
       toastError('Failed to deactivate tenant')
     }
   }
@@ -173,13 +174,13 @@ export default function AdminTenants() {
                 <div>
                   <label className={styles.selectLabel}>Currency</label>
                   <select className={styles.select} value={form.currency} onChange={set('currency')}>
-                    {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                    {TENANT_CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className={styles.selectLabel}>Timezone</label>
                   <select className={styles.select} value={form.timezone} onChange={set('timezone')}>
-                    {TIMEZONES.map((tz) => <option key={tz} value={tz}>{tz}</option>)}
+                    {TENANT_TIMEZONES.map((tz) => <option key={tz} value={tz}>{tz}</option>)}
                   </select>
                 </div>
               </div>
