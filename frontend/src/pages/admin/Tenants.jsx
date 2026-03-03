@@ -179,7 +179,7 @@ export default function AdminTenants() {
                 <div>
                   <label className={styles.selectLabel}>Timezone</label>
                   <select className={styles.select} value={form.timezone} onChange={set('timezone')}>
-                    {TIMEZONES.map((t) => <option key={t} value={t}>{t}</option>)}
+                    {TIMEZONES.map((tz) => <option key={tz} value={tz}>{tz}</option>)}
                   </select>
                 </div>
               </div>
