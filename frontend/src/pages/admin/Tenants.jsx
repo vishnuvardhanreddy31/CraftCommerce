@@ -15,7 +15,7 @@ const EMPTY_FORM = {
   currency: 'USD',
   timezone: 'UTC'
 }
-const TENANT_LIST_LIMIT = 200
+const TENANT_LIST_LIMIT = Number(import.meta.env.VITE_TENANT_LIST_LIMIT) || 200
 
 
 export default function AdminTenants() {

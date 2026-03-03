@@ -36,7 +36,7 @@ async def list_tenants(
     if after_id and skip:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot use skip parameter with after_id for cursor pagination. Use either skip or after_id.",
+            detail="Cannot use both skip and after_id parameters together.",
         )
     service = TenantService(db)
     return await service.list_tenants(skip=skip, limit=limit, after_id=after_id)
