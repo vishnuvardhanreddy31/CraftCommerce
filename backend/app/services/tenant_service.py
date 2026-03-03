@@ -35,8 +35,8 @@ class TenantService:
 
         return TenantResponse(**doc_to_response(tenant_doc))
 
-    async def list_tenants(self, limit: int = 200) -> list[TenantResponse]:
-        cursor = self.db.tenants.find().sort("store_name", 1).limit(limit)
+    async def list_tenants(self, skip: int = 0, limit: int = 200) -> list[TenantResponse]:
+        cursor = self.db.tenants.find().sort("store_name", 1).skip(skip).limit(limit)
         docs = await cursor.to_list(length=limit)
         return [TenantResponse(**doc_to_response(doc)) for doc in docs]
 

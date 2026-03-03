@@ -38,7 +38,7 @@ export default function AdminTenants() {
     } finally {
       setLoading(false)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [toastError])
 
   useEffect(() => { load() }, [load])
 

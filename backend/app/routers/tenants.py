@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 from motor.motor_asyncio import AsyncIOMotorDatabase
 
 from app.core.database import get_database
@@ -26,11 +26,13 @@ async def create_tenant(
 
 @router.get("", response_model=list[TenantResponse])
 async def list_tenants(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(200, ge=1, le=500),
     current_user: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     service = TenantService(db)
-    return await service.list_tenants()
+    return await service.list_tenants(skip=skip, limit=limit)
 
 
 @router.get("/{tenant_id}", response_model=TenantResponse)

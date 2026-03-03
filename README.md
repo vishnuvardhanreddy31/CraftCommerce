@@ -327,9 +327,7 @@ MONGODB_URL=mongodb://localhost:27017 python seed.py
 ## Demo Credentials
 
 ### Platform Admin Access
-Use the admin credentials below to access the admin dashboard and manage tenants at `/admin/tenants`.
-
-**Tenant 1 ID:** `64a0000000000000000000a1`
+Use the admin credentials below (tenant ID `64a0000000000000000000a1`) to access the admin dashboard and manage tenants at `/admin/tenants`.
 
 | Role | Email | Password |
 |---|---|---|
