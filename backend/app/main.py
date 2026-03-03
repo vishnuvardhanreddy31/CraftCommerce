@@ -73,7 +73,9 @@ if FRONTEND_DIST.exists():
 
     @app.get("/{full_path:path}", include_in_schema=False)
     async def serve_spa(full_path: str) -> FileResponse:
-        if full_path.startswith("api") or full_path in {"docs", "redoc", "openapi.json", "health"}:
+        if full_path == "api" or full_path.startswith("api/"):
+            raise HTTPException(status_code=404)
+        if full_path in {"docs", "redoc", "openapi.json", "health"}:
             raise HTTPException(status_code=404)
         return FileResponse(FRONTEND_DIST / "index.html")
 
