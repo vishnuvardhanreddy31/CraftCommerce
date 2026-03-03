@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/tenants", tags=["tenants"])
 @router.post("", response_model=TenantResponse, status_code=status.HTTP_201_CREATED)
 async def create_tenant(
     data: TenantCreate,
-    _: dict = Depends(require_role("admin")),
+    admin_user: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     service = TenantService(db)
@@ -30,7 +30,7 @@ async def list_tenants(
     skip: int = Query(0, ge=0),
     after_id: str | None = Query(None),
     limit: int = Query(DEFAULT_TENANT_LIST_LIMIT, ge=1, le=500),
-    _: dict = Depends(require_role("admin")),
+    admin_user: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     if after_id and skip:
@@ -55,7 +55,7 @@ async def get_tenant(
 async def update_tenant(
     tenant_id: str,
     data: TenantUpdate,
-    _: dict = Depends(require_role("admin")),
+    admin_user: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     service = TenantService(db)
@@ -65,7 +65,7 @@ async def update_tenant(
 @router.delete("/{tenant_id}", response_model=TenantResponse)
 async def delete_tenant(
     tenant_id: str,
-    _: dict = Depends(require_role("admin")),
+    admin_user: dict = Depends(require_role("admin")),
     db: AsyncIOMotorDatabase = Depends(get_database),
 ):
     service = TenantService(db)
