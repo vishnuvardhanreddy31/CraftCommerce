@@ -34,11 +34,12 @@ export default function Navbar() {
         <Link to="/" className={styles.logo} onClick={close}>
           <svg width="28" height="28" viewBox="0 0 64 64" fill="none" aria-hidden="true">
             <rect width="64" height="64" rx="14" fill="var(--color-primary)" />
-            <path d="M16 20h32M16 32h24M16 44h16" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
-            <circle cx="48" cy="44" r="9" fill="var(--color-secondary)" />
-            <path d="M44 44l3 3 5-5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M32 12 C32 12 20 24 20 36 C20 42.6 25.4 48 32 48 C38.6 48 44 42.6 44 36 C44 24 32 12 32 12Z" fill="#fff" fillOpacity="0.9"/>
+            <path d="M32 20 L32 48" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round"/>
+            <path d="M32 30 C32 30 26 26 22 28" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M32 36 C32 36 38 32 42 34" stroke="var(--color-primary)" strokeWidth="2" strokeLinecap="round"/>
           </svg>
-          <span>{theme.storeName || 'CraftCommerce'}</span>
+          <span>{theme.storeName || 'FarmCommerce'}</span>
         </Link>
 
         {/* Desktop nav */}
@@ -83,6 +84,7 @@ export default function Navbar() {
                       <>
                         <Link to="/admin" className={styles.dropdownItem} onClick={close}>Admin Dashboard</Link>
                         <Link to="/admin/tenants" className={styles.dropdownItem} onClick={close}>Tenants</Link>
+                        <Link to="/admin/users"   className={styles.dropdownItem} onClick={close}>Users</Link>
                         <Link to="/admin/products" className={styles.dropdownItem} onClick={close}>Products</Link>
                         <Link to="/admin/orders" className={styles.dropdownItem} onClick={close}>Orders</Link>
                         <Link to="/admin/settings" className={styles.dropdownItem} onClick={close}>Settings</Link>
@@ -123,6 +125,7 @@ export default function Navbar() {
               <>
                 <NavLink to="/admin"            className={styles.mobileLink} onClick={close}>Dashboard</NavLink>
                 <NavLink to="/admin/tenants"    className={styles.mobileLink} onClick={close}>Tenants</NavLink>
+                <NavLink to="/admin/users"      className={styles.mobileLink} onClick={close}>Users</NavLink>
                 <NavLink to="/admin/products"   className={styles.mobileLink} onClick={close}>Admin Products</NavLink>
                 <NavLink to="/admin/categories" className={styles.mobileLink} onClick={close}>Categories</NavLink>
                 <NavLink to="/admin/orders"     className={styles.mobileLink} onClick={close}>Admin Orders</NavLink>

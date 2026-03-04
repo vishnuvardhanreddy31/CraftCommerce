@@ -25,8 +25,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="CraftCommerce API",
-    description="Multi-tenant SaaS eCommerce platform API",
+    title="FarmCommerce API",
+    description="Multi-tenant farm-to-market eCommerce platform API",
     version="1.0.0",
     lifespan=lifespan,
     docs_url="/docs",
@@ -84,4 +84,4 @@ if FRONTEND_DIST.exists():
 
 @app.get("/health", tags=["health"])
 async def health_check() -> Dict[str, Any]:
-    return {"status": "healthy", "service": "CraftCommerce API", "version": "1.0.0"}
+    return {"status": "healthy", "service": "FarmCommerce API", "version": "1.0.0"}

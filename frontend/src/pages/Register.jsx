@@ -66,10 +66,11 @@ export default function Register() {
         <div className={styles.header}>
           <svg width="40" height="40" viewBox="0 0 64 64" fill="none" aria-hidden="true">
             <rect width="64" height="64" rx="14" fill="var(--color-primary)" />
-            <path d="M16 20h32M16 32h24M16 44h16" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
+            <path d="M32 12 C32 12 20 24 20 36 C20 42.6 25.4 48 32 48 C38.6 48 44 42.6 44 36 C44 24 32 12 32 12Z" fill="#fff" fillOpacity="0.9"/>
+            <path d="M32 20 L32 48" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
           <h1 className={styles.title}>Create account</h1>
-          <p className={styles.sub}>Start selling with CraftCommerce today</p>
+          <p className={styles.sub}>Join FarmCommerce and start selling your produce</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>

@@ -181,7 +181,7 @@ export default function AdminTenants() {
             </div>
             <form onSubmit={handleSave} className={styles.modalForm}>
               <Input label="Store Name *" value={form.store_name} onChange={handleFieldChange('store_name')} required />
-              <Input label="Store Slug *" value={form.slug} onChange={handleFieldChange('slug')} placeholder="artisan-crafts" required />
+              <Input label="Store Slug *" value={form.slug} onChange={handleFieldChange('slug')} placeholder="green-valley-farm" required />
               <Input label="Owner Email *" type="email" value={form.owner_email} onChange={handleFieldChange('owner_email')} required />
               <div className={styles.row2}>
                 <div>

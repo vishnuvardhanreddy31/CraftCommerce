@@ -10,10 +10,11 @@ export default function Footer() {
         <div className={styles.brand}>
           <svg width="22" height="22" viewBox="0 0 64 64" fill="none" aria-hidden="true">
             <rect width="64" height="64" rx="14" fill="var(--color-primary)" />
-            <path d="M16 20h32M16 32h24M16 44h16" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
+            <path d="M32 12 C32 12 20 24 20 36 C20 42.6 25.4 48 32 48 C38.6 48 44 42.6 44 36 C44 24 32 12 32 12Z" fill="#fff" fillOpacity="0.9"/>
+            <path d="M32 20 L32 48" stroke="var(--color-primary)" strokeWidth="2.5" strokeLinecap="round"/>
           </svg>
-          <span className={styles.brandName}>CraftCommerce</span>
-          <p className={styles.tagline}>Multi-tenant SaaS eCommerce Platform</p>
+          <span className={styles.brandName}>FarmCommerce</span>
+          <p className={styles.tagline}>Direct farm-to-market platform for farmers</p>
         </div>
 
         <nav className={styles.links} aria-label="Footer navigation">
@@ -37,7 +38,7 @@ export default function Footer() {
 
       <div className={styles.bottom}>
         <div className="container">
-          <p className={styles.copy}>© {year} CraftCommerce. All rights reserved.</p>
+          <p className={styles.copy}>© {year} FarmCommerce. All rights reserved.</p>
         </div>
       </div>
     </footer>

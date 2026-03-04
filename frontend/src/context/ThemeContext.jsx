@@ -4,10 +4,10 @@ import client from '../api/client.js'
 export const ThemeContext = createContext(null)
 
 const DEFAULT_THEME = {
-  primaryColor: '#6366f1',
-  secondaryColor: '#8b5cf6',
+  primaryColor: '#16a34a',
+  secondaryColor: '#ca8a04',
   fontFamily: 'Inter, system-ui, sans-serif',
-  storeName: 'CraftCommerce',
+  storeName: 'FarmCommerce',
   logoUrl: null,
   currency: 'USD',
   taxRate: 0
