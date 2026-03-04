@@ -78,7 +78,7 @@ export default function AdminSettings() {
           <Card padding="lg" shadow="md">
             <h2 className={styles.sectionTitle}>Branding</h2>
             <div className={styles.fields}>
-              <Input label="Store Name" value={form.storeName} onChange={set('storeName')} placeholder="CraftCommerce" />
+              <Input label="Store Name" value={form.storeName} onChange={set('storeName')} placeholder="FarmCommerce" />
               <Input label="Logo URL" type="url" value={form.logoUrl} onChange={set('logoUrl')} placeholder="https://…" hint="Link to your logo image" />
             </div>
           </Card>

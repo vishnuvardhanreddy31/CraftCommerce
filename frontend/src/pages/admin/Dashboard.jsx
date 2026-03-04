@@ -54,6 +54,7 @@ export default function Dashboard() {
             <Link to="/admin/orders"     className={styles.adminLink}>Orders</Link>
             <Link to="/admin/settings"   className={styles.adminLink}>Settings</Link>
             <Link to="/admin/tenants"    className={styles.adminLink}>Tenants</Link>
+            <Link to="/admin/users"      className={styles.adminLink}>Users</Link>
           </div>
         </div>
 

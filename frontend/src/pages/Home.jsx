@@ -34,12 +34,12 @@ export default function Home() {
       <section className={styles.hero}>
         <div className={`container ${styles.heroInner}`}>
           <div className={styles.heroContent}>
-            <span className={styles.heroPill}>Multi-tenant SaaS eCommerce</span>
+            <span className={styles.heroPill}>🌾 Farm-to-Market Platform</span>
             <h1 className={styles.heroTitle}>
-              Build Your <span className={styles.highlight}>Craft</span> Store
+              Sell Your <span className={styles.highlight}>Farm</span> Fresh Products
             </h1>
             <p className={styles.heroSub}>
-              Launch your online store in minutes. Manage products, orders, and customers from one powerful dashboard.
+              The easiest way for farmers to sell vegetables, fruits, grains, and more directly to customers. Upload photos, set your prices, and start earning today.
             </p>
             <div className={styles.heroCta}>
               <Button size="lg" as={Link} to="/products">
@@ -54,12 +54,12 @@ export default function Home() {
               <div className={styles.heroCardBody}>
                 <div className={styles.heroCardLine} style={{ width: '75%' }} />
                 <div className={styles.heroCardLine} style={{ width: '50%', opacity: 0.5 }} />
-                <div className={styles.heroCardPrice}>$49.99</div>
+                <div className={styles.heroCardPrice}>₹149 / kg</div>
               </div>
             </div>
             <div className={styles.heroStat}>
-              <span className={styles.heroStatNum}>12k+</span>
-              <span className={styles.heroStatLabel}>Products</span>
+              <span className={styles.heroStatNum}>5k+</span>
+              <span className={styles.heroStatLabel}>Farmers</span>
             </div>
             <div className={[styles.heroStat, styles.heroStatRight].join(' ')}>
               <span className={styles.heroStatNum}>98%</span>
@@ -86,7 +86,7 @@ export default function Home() {
                     className={styles.categoryCard}
                   >
                     <span className={styles.categoryEmoji} aria-hidden="true">
-                      {cat.emoji || '🛍️'}
+                      {cat.emoji || '🌿'}
                     </span>
                     <span className={styles.categoryName}>{cat.name}</span>
                     {cat.product_count !== undefined && (
@@ -97,9 +97,16 @@ export default function Home() {
               </div>
             ) : (
               <div className={styles.categoryGrid}>
-                {['Electronics', 'Clothing', 'Home & Garden', 'Sports', 'Books', 'Art'].map((name) => (
+                {[
+                  { name: 'Vegetables', emoji: '🥦' },
+                  { name: 'Fruits',     emoji: '🍎' },
+                  { name: 'Grains',     emoji: '🌾' },
+                  { name: 'Dairy',      emoji: '🥛' },
+                  { name: 'Herbs',      emoji: '🌿' },
+                  { name: 'Livestock',  emoji: '🐄' },
+                ].map(({ name, emoji }) => (
                   <Link key={name} to={`/products?q=${encodeURIComponent(name)}`} className={styles.categoryCard}>
-                    <span className={styles.categoryEmoji} aria-hidden="true">🛍️</span>
+                    <span className={styles.categoryEmoji} aria-hidden="true">{emoji}</span>
                     <span className={styles.categoryName}>{name}</span>
                   </Link>
                 ))}
@@ -113,10 +120,10 @@ export default function Home() {
       <section className={styles.section}>
         <div className="container">
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Featured Products</h2>
+            <h2 className={styles.sectionTitle}>Fresh from the Farm</h2>
             <Link to="/products" className={styles.seeAll}>See All →</Link>
           </div>
-          <ProductGrid products={featured} loading={loading} emptyMessage="No featured products yet." />
+          <ProductGrid products={featured} loading={loading} emptyMessage="No products yet. Be the first farmer to list!" />
         </div>
       </section>
 
@@ -124,9 +131,9 @@ export default function Home() {
       <section className={styles.ctaBanner}>
         <div className={`container ${styles.ctaBannerInner}`}>
           <div>
-            <h2 className={styles.ctaBannerTitle}>Ready to start selling?</h2>
+            <h2 className={styles.ctaBannerTitle}>Ready to sell your harvest?</h2>
             <p className={styles.ctaBannerSub}>
-              Create your tenant account and launch your store today.
+              Register as a farmer, upload photos of your produce, and reach customers directly.
             </p>
           </div>
           <Link to="/register" className={styles.ctaBannerBtn}>Get Started Free →</Link>
